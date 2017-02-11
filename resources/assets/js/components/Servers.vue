@@ -128,28 +128,57 @@
         created() {
             this.changeNewServerName();
 
-            axios.get('/api/servers')
-                .then(({data}) => {
-                    this.servers = data;
-                });
-        },
-        filters: {
-            nltobr(text) {
-                return text.replace(/[\n\r|\n]/g, "<br />");
-            }
+            this.loadServers();
+            this.loadCurrentUserAndListen();
         },
         methods: {
-            createNewServer() {
-                axios.post('/api/servers', {
-                    name: this.newServerName
-                })
+            loadServers() {
+                axios.get('/api/servers')
+                    .then(({data}) => {
+                        this.servers = data;
+                    });
+            },
+            createNewServer () {
+                axios
+                    .post(
+                        '/api/servers',
+                        { name: this.newServerName },
+                        { timeout: 1000 }
+                    )
                     .then(({data}) => {
                         this.servers.push(data);
                         this.changeNewServerName();
                     })
             },
-            changeNewServerName() {
+            changeNewServerName () {
                 this.newServerName = generator.haikunate({tokenChars: "HAIKUNATE"});
+            },
+            loadCurrentUserAndListen () {
+                axios.get('/api/user')
+                    .then(({data}) => {
+                        this.listen(data.id);
+                    });
+            },
+            listen (userId) {
+                Echo.private('servers.' + userId)
+                    .listen('ServerWasCreatedOnProvider', (event) => {
+                        this.servers = _.map(this.servers, (server) => {
+                            if (server.id === event.server.id) {
+                                server = Object.assign({}, server, event.server);
+                            }
+
+                            return server;
+                        });
+                    })
+                    .listen('ServerWasProvisioned', (event) => {
+                        this.servers = _.map(this.servers, (server) => {
+                            if (server.id === event.server.id) {
+                                server = Object.assign({}, server, event.server);
+                            }
+
+                            return server;
+                        });
+                    });
             }
         }
     }

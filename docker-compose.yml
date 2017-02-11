@@ -28,6 +28,20 @@ services:
       MYSQL_PASSWORD: "secret"
     networks:
       - back
+  queue:
+    image: schickling/beanstalkd:latest
+    networks:
+      - back
+    ports:
+      - "11300:11300"
+
+  worker:
+      image: madewithlove/images:php-7.1-fpm
+      command: php artisan queue:work
+      volumes:
+        - .:/var/www/html
+      networks:
+        - back
 
 networks:
   front:

@@ -4,11 +4,13 @@ namespace App\Listeners;
 
 use App\Events\ServerWasCreatedOnProvider;
 use App\Events\ServerWasCreated;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 
-class CreateServerOnProvider
+class CreateServerOnProvider implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     /**
      * Handle the event.
      *
@@ -17,6 +19,8 @@ class CreateServerOnProvider
      */
     public function handle(ServerWasCreated $event)
     {
+        sleep(5);
+
         // Trigger the creation on AWS and marks the server as provisioning.
         $event->server->markAsProvisioning(date('c') . ' | Triggered cloud provider to create the server');
 

@@ -7,7 +7,7 @@ use App\Events\ServerWasProvisioned;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ProvisionServer
+class ProvisionServer implements ShouldQueue
 {
     /**
      * Handle the event.
@@ -18,6 +18,7 @@ class ProvisionServer
      */
     public function handle(ServerWasCreatedOnProvider $event)
     {
+        sleep(5);
         // Provisions the server and marks it as ready.
         $event->server->markAsReady(date('c') . ' | Provisioning server');
 
