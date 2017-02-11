@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  web:
+    image: madewithlove/images:nginx-1.11-alpine
+    volumes:
+      - .:/var/www/html:ro
+    ports:
+      - "80:80"
+    networks:
+      - front
+      - php
+  php:
+    image: madewithlove/images:php-7.1-fpm
+    volumes:
+      - .:/var/www/html
+    networks:
+      - php
+      - back
+  db:
+    image: mysql:5.7
+    volumes:
+      - mysqldata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "secret"
+      MYSQL_DATABASE: "homestead"
+      MYSQL_USER: "homestead"
+      MYSQL_PASSWORD: "secret"
+    networks:
+      - back
+
+networks:
+  front:
+    driver: "bridge"
+  php:
+    driver: "bridge"
+  back:
+    driver: "bridge"
+
+volumes:
+  mysqldata:
+    driver: "local"
