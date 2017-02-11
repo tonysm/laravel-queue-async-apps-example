@@ -68,6 +68,8 @@
                                     </td>
 
                                     <td>
+                                        <span class="glyphicon glyphicon-refresh glyphicon-spin" v-if="server.status === 'creating' || server.status === 'provisioning'"></span>
+                                        <span class="glyphicon glyphicon-check" v-if="server.status === 'ready'"></span>
                                         {{ server.status }}
                                     </td>
 
