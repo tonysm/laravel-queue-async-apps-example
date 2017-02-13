@@ -43,4 +43,24 @@ class ServersController extends Controller
 
         return $server->load('user');
     }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Server $server
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function destroy(Request $request, Server $server)
+    {
+        $server = $request->user()->servers()->findOrFail($server);
+
+        if (!in_array($server->status, ['ready', 'failed'])) {
+            throw new \Exception('Not in a good state to be deleted, buddy.');
+        }
+
+        $server->delete();
+
+        return response()->json([], 204);
+    }
 }

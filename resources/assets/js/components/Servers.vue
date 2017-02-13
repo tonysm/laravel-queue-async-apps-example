@@ -62,6 +62,11 @@
                             </thead>
 
                             <tbody>
+                                <tr v-if="servers.length === 0">
+                                    <td colspan="3">
+                                        You haven't created any server yet.
+                                    </td>
+                                </tr>
                                 <tr v-for="server in servers">
                                     <td>
                                         {{ server.name }}
@@ -85,8 +90,19 @@
                                             View Logs
                                         </button>
 
+                                        <button
+                                                class="btn btn-sm btn-danger"
+                                                type="button"
+                                                :disabled="server.status !== 'ready' && server.status !== 'failed'"
+                                                data-toggle="modal"
+                                                :data-target="'#serversRemove' + server.id"
+                                        >
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                            Remove
+                                        </button>
+
                                         <div class="modal fade" :id="'serverLogs' + server.id" tabindex="-1" role="dialog" :aria-labelledby="'serverLogsModalLabel' + server.id">
-                                            <div class="modal-dialog" style="width: 60%" role="document">
+                                            <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -97,6 +113,24 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal fade" :id="'serversRemove' + server.id" tabindex="-1" role="dialog" :aria-labelledby="'serversRemoveLabel' + server.id">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" :id="'serversRemoveLabel' + server.id">Remove Confirmation</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to remove server <strong>{{ server.name }}</strong>?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+                                                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="removeServer(server)">OK</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -178,6 +212,12 @@
 
                             return server;
                         });
+                    });
+            },
+            removeServer(server) {
+                axios.delete(`/api/servers/${server.id}`).
+                    then(() => {
+                        this.servers = _.filter(this.servers, (s) => s.id !== server.id);
                     });
             }
         }

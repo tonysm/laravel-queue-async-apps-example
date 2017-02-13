@@ -19,7 +19,7 @@ class CreateServerOnProvider implements ShouldQueue
      */
     public function handle(ServerWasCreated $event)
     {
-        sleep(5);
+        sleep(3);
 
         // Trigger the creation on AWS and marks the server as provisioning.
         $event->server->markAsProvisioning(date('c') . ' | Triggered cloud provider to create the server');

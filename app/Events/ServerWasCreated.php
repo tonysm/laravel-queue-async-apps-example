@@ -4,13 +4,14 @@ namespace App\Events;
 
 use App\Server;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
 
 class ServerWasCreated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use SerializesModels;
 
+    /**
+     * @var \App\Server
+     */
     public $server;
 
     /**

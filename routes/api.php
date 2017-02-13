@@ -18,5 +18,5 @@ Route::middleware('auth:api')->group(function () {
         return $request->user();
     });
 
-    Route::resource('servers', 'ServersController', ['only' => ['index', 'store']]);
+    Route::resource('servers', 'ServersController', ['only' => ['index', 'store', 'destroy']]);
 });
