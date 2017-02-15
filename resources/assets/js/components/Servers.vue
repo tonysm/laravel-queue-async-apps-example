@@ -42,8 +42,8 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewServer">Yes, create it.</button>
+                                            <button type="button" class="btn btn-default" :disabled="creating" data-dismiss="modal">No</button>
+                                            <button type="button" class="btn btn-primary" :disabled="creating" @click="createNewServer">Yes, create it.</button>
                                         </div>
                                     </div>
                                 </div>
@@ -157,6 +157,7 @@
             return {
                 servers: [],
                 newServerName: null,
+                creating: false,
             };
         },
         created() {
@@ -173,15 +174,18 @@
                     });
             },
             createNewServer () {
+                this.creating = true;
                 axios
                     .post(
                         '/api/servers',
                         { name: this.newServerName },
-                        { timeout: 1000 }
+                        { timeout: 2000 }
                     )
                     .then(({data}) => {
+                        this.creating = false;
                         this.servers.push(data);
                         this.changeNewServerName();
+                        $('#newServerModal').modal('hide');
                     })
             },
             changeNewServerName () {

@@ -41,7 +41,7 @@ class ServersController extends Controller
 
         event(new ServerWasCreated($server));
 
-        return $server->load('user');
+        return response()->json($server->load('user'), 201);
     }
 
     /**
