@@ -36,7 +36,7 @@ services:
       - "11300:11300"
 
   worker:
-      image: madewithlove/images:php-7.1-fpm
+      image: madewithlove/images:php-7.1-cli
       command: php artisan queue:work
       volumes:
         - .:/var/www/html
