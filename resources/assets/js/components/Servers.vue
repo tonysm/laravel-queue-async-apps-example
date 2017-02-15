@@ -42,8 +42,11 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-                                            <button type="button" class="btn btn-primary" data-dismiss="modal" @click="createNewServer">Yes, create it.</button>
+                                            <button type="button" class="btn btn-default" data-dismiss="modal" :disabled="creating">No</button>
+                                            <button type="button" class="btn btn-primary" @click="createNewServer" :disabled="creating">
+                                                <span class="glyphicon glyphicon-refresh glyphicon-spin" v-show="creating"></span>
+                                                {{ creating ? 'Creating...' : 'Yes, create it.' }}
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -123,6 +126,7 @@
             return {
                 servers: [],
                 newServerName: null,
+                creating: false,
             };
         },
         created() {
@@ -140,12 +144,17 @@
         },
         methods: {
             createNewServer() {
-                axios.post('/api/servers', {
-                    name: this.newServerName
-                })
+                this.creating = true;
+
+                axios
+                    .post('/api/servers', {
+                        name: this.newServerName
+                    })
                     .then(({data}) => {
+                        this.creating = false;
                         this.servers.push(data);
                         this.changeNewServerName();
+                        $('#newServerModal').modal('hide');
                     })
             },
             changeNewServerName() {

@@ -18,6 +18,7 @@ class ProvisionServer
      */
     public function handle(ServerWasCreatedOnProvider $event)
     {
+        sleep(3);
         // Provisions the server and marks it as ready.
         $event->server->markAsReady(date('c') . ' | Provisioning server');
 
