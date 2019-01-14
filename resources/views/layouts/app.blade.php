@@ -12,14 +12,6 @@
 
     <!-- Styles -->
     <link href="{{ mix('/css/app.css') }}" rel="stylesheet">
-
-    <!-- Scripts -->
-    <script>
-        window.Laravel = {!! json_encode([
-            'csrfToken' => csrf_token(),
-            'pusherKey' => config('broadcasting.connections.pusher.key'),
-        ]) !!};
-    </script>
 </head>
 <body>
     <div id="app">

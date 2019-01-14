@@ -198,6 +198,7 @@
                     });
             },
             listen (userId) {
+                return;
                 Echo.private('servers.' + userId)
                     .listen('ServerWasCreatedOnProvider', (event) => {
                         this.servers = _.map(this.servers, (server) => {
