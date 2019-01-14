@@ -43,9 +43,16 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from "laravel-echo";
-//
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: window.Laravel.pusherKey,
-// });
+import Echo from "laravel-echo"
+
+window.Pusher = require('pusher-js');
+
+let pusherKey = document.head.querySelector('meta[name="pusher-key"]');
+
+window.Echo = new Echo({
+  broadcaster: 'pusher',
+  key: pusherKey.content,
+  wsHost: window.location.hostname,
+  wsPort: 6001,
+  disableStats: true,
+});

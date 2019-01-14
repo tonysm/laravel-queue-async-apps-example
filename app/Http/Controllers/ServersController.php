@@ -47,14 +47,14 @@ class ServersController extends Controller
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \App\Server $server
+     * @param string $serverId
      *
      * @return \Illuminate\Http\JsonResponse
      * @throws \Exception
      */
-    public function destroy(Request $request, Server $server)
+    public function destroy(Request $request, string $serverId)
     {
-        $server = $request->user()->servers()->findOrFail($server);
+        $server = $request->user()->servers()->findOrFail($serverId);
 
         if (!in_array($server->status, ['ready', 'failed'])) {
             throw new \Exception('Not in a good state to be deleted, buddy.');

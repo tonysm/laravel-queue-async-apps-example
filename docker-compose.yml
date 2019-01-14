@@ -31,6 +31,15 @@ services:
         - .:/var/www
       networks:
         - back
+  websockets:
+      image: hitalos/laravel:latest
+      command: php artisan websockets:serve
+      volumes:
+        - .:/var/www
+      ports:
+        - "6001:6001"
+      networks:
+        - back
 
 networks:
   back:
