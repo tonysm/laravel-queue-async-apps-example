@@ -20,8 +20,8 @@ services:
       MYSQL_PASSWORD: "secret"
     networks:
       - back
-  queue:
-    image: schickling/beanstalkd:latest
+  redis:
+    image: redis:latest
     networks:
       - back
   worker:

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ServerWasCreated;
 use App\Server;
 use Illuminate\Http\Request;
+use App\Events\ServerWasCreated;
 
 class ServersController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
