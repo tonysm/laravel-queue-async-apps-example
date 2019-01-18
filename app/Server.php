@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property int $user_id
+ */
 class Server extends Model
 {
     protected $guarded = [];

@@ -147,6 +147,7 @@
 </template>
 
 <script>
+    import Vue from 'vue';
     import Haikunator from 'haikunator';
 
     const generator = new Haikunator({});
@@ -183,7 +184,7 @@
                     )
                     .then(({data}) => {
                         this.creating = false;
-                        this.servers.push(data);
+                        // this.servers.push(data);
                         this.changeNewServerName();
                         $('#newServerModal').modal('hide');
                     })
@@ -197,25 +198,21 @@
                         this.listen(data.id);
                     });
             },
+            updateServer(newServer) {
+              let index = this.servers.findIndex((server) => server.id === newServer.id);
+
+              Vue.set(this.servers, index, newServer);
+            },
             listen (userId) {
                 Echo.private(`servers.${userId}`)
+                    .listen('ServerWasCreated', (event) => {
+                        this.servers.push(event.server);
+                    })
                     .listen('ServerWasCreatedOnProvider', (event) => {
-                        this.servers = _.map(this.servers, (server) => {
-                            if (server.id === event.server.id) {
-                                server = Object.assign({}, server, event.server);
-                            }
-
-                            return server;
-                        });
+                        this.updateServer(event.server);
                     })
                     .listen('ServerWasProvisioned', (event) => {
-                        this.servers = _.map(this.servers, (server) => {
-                            if (server.id === event.server.id) {
-                                server = Object.assign({}, server, event.server);
-                            }
-
-                            return server;
-                        });
+                        this.updateServer(event.server);
                     });
             },
             removeServer(server) {

@@ -24,6 +24,7 @@ services:
     image: redis:latest
     networks:
       - back
+    command: redis-server --appendonly yes
   worker:
       image: hitalos/laravel:latest
       command: php artisan queue:work
